@@ -23,7 +23,7 @@
     "url": "http://github.com/ExpressenAB/exp-fake-amqplib/raw/master/LICENSE"
   },
   "dependencies": {
-    "lodash": "^4.10.0"
+    "bluebird": "^3.5.0 "
   },
   "devDependencies": {
     "mocha": "^2.0.1"

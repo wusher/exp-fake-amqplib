@@ -1,7 +1,17 @@
 "use strict";
+var Promise = require('bluebird')
 
 var exchanges = {};
 var queues = {};
+
+
+
+function promisify(object) {
+  Object.getOwnPropertyNames(object).forEach(function(key){
+      object[key] = Promise.promisify(object[key]);
+  });
+  return object
+}
 
 function connect(url, options, connCallback) {
   if (!connCallback) {
@@ -64,7 +74,9 @@ function connect(url, options, connCallback) {
       prefetch: function () {},
       on: function () {}
     };
-    channelCallback(null, channel);
+
+
+    channelCallback(null, promisify(channel));
   };
 
   var connection = {
@@ -73,8 +85,7 @@ function connect(url, options, connCallback) {
     on: function () {}
   };
 
-  connCallback(null, connection);
-
+  connCallback(null, promisify(connection));
 }
 
 function resetMock() {
@@ -82,7 +93,7 @@ function resetMock() {
   exchanges = {};
 }
 
-module.exports = {connect: connect, resetMock: resetMock};
+module.exports = promisify({connect: connect, resetMock: resetMock });
 
 function setIfUndef(object, prop, value) {
   if (!object[prop]) {
